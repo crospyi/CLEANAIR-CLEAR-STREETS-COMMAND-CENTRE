@@ -13,7 +13,8 @@ import {
   deleteDoc,
   getDoc,
   increment,
-  arrayUnion
+  arrayUnion,
+  setDoc
 } from 'firebase/firestore';
 import { CitizenReport, AntiSmogVehicle } from './types';
 import AiTriagePanel from './components/AiTriagePanel';
@@ -244,6 +245,26 @@ export default function App() {
         }
       }
 
+      // Send automated notification in read-only municipal channel to notify the user
+      const report = reports.find(r => r.id === reportId);
+      if (report) {
+        const msgId = `update-${Date.now()}`;
+        const timestampStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const updateMsg = {
+          id: msgId,
+          senderName: "🏛️ Municipal Authority",
+          senderId: "municipal_authority",
+          avatar: "🏛️",
+          state: report.state,
+          city: report.city,
+          text: `📢 @${report.senderName}, your report on "${report.category}" has been verified by the Municipal Authority. Thank you for your contribution!`,
+          timestamp: timestampStr,
+          createdAt: Date.now(),
+          communityId: 'municipal_updates'
+        };
+        await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
+      }
+
       playSound(659.25, 0.12, 'sine');
       showToast("✅ Incident verified! +100 points awarded to citizen submitter.");
     } catch (err) {
@@ -285,6 +306,26 @@ export default function App() {
         });
       });
 
+      // Send automated notification in read-only municipal channel to notify the user
+      const report = reports.find(r => r.id === reportId);
+      if (report) {
+        const msgId = `update-${Date.now()}`;
+        const timestampStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const updateMsg = {
+          id: msgId,
+          senderName: "🏛️ Municipal Authority",
+          senderId: "municipal_authority",
+          avatar: "🏛️",
+          state: report.state,
+          city: report.city,
+          text: `🚚 Dispatch Alert for @${report.senderName}: A ${vehicleType} has been dispatched to coordinate response to your "${report.category}" report in ${report.city}. Mission: ${recommendationText}`,
+          timestamp: timestampStr,
+          createdAt: Date.now(),
+          communityId: 'municipal_updates'
+        };
+        await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
+      }
+
       playSound(440, 0.18, 'sine');
       showToast(`🚚 Dispatch approved! MCD ${vehicleType} routing to coordinates.`);
     } catch (err) {
@@ -313,6 +354,26 @@ export default function App() {
           ? { ...v, status: 'Idle', currentTask: undefined } 
           : v
       ));
+
+      // Send automated notification in read-only municipal channel to notify the user
+      const report = reports.find(r => r.id === reportId);
+      if (report) {
+        const msgId = `update-${Date.now()}`;
+        const timestampStr = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        const updateMsg = {
+          id: msgId,
+          senderName: "🏛️ Municipal Authority",
+          senderId: "municipal_authority",
+          avatar: "🏛️",
+          state: report.state,
+          city: report.city,
+          text: `✅ Resolution Update: The "${report.category}" report submitted by @${report.senderName} in ${report.city} has been resolved. Containment/cleanup completed.`,
+          timestamp: timestampStr,
+          createdAt: Date.now(),
+          communityId: 'municipal_updates'
+        };
+        await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
+      }
 
       playSound(880, 0.15, 'sine');
       showToast("❇️ incident resolved. Containment systems reported clean.");
