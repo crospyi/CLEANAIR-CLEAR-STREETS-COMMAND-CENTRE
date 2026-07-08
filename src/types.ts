@@ -14,6 +14,8 @@ export interface CitizenReport {
   createdAt: string; // ISO Timestamp string
   status?: 'Pending' | 'Dispatched' | 'Resolved'; // For workflow tracking
   dispatchLogs?: string[];
+  lat?: number;
+  lon?: number;
 }
 
 export interface CommunityMessage {

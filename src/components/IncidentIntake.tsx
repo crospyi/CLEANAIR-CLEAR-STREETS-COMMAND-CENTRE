@@ -197,7 +197,11 @@ export default function IncidentIntake({
                     {/* Watermark overlay */}
                     <div className="absolute bottom-2 left-2 right-2 bg-white/90 border border-slate-200 px-2 py-1.5 rounded text-[8px] font-mono text-slate-600 flex flex-col gap-0.5 pointer-events-none">
                       <div className="flex justify-between">
-                        <span>LAT/LON: MOCK WATERMARK</span>
+                        <span>
+                          LAT/LON: {typeof selectedReport.lat === 'number' && typeof selectedReport.lon === 'number'
+                            ? `${selectedReport.lat.toFixed(4)}, ${selectedReport.lon.toFixed(4)}`
+                            : 'MOCK WATERMARK'}
+                        </span>
                         <span>{formatTimestamp(selectedReport.createdAt)}</span>
                       </div>
                       <div className="flex justify-between text-[7px] text-slate-500">
