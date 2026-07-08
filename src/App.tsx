@@ -260,7 +260,8 @@ export default function App() {
           text: `📢 @${report.senderName}, your report on "${report.category}" has been verified by the Municipal Authority. Thank you for your contribution!`,
           timestamp: timestampStr,
           createdAt: Date.now(),
-          communityId: 'municipal_updates'
+          communityId: 'municipal_updates',
+          imageUrl: report.imageUrl || null
         };
         await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
       }
@@ -321,7 +322,8 @@ export default function App() {
           text: `🚚 Dispatch Alert for @${report.senderName}: A ${vehicleType} has been dispatched to coordinate response to your "${report.category}" report in ${report.city}. Mission: ${recommendationText}`,
           timestamp: timestampStr,
           createdAt: Date.now(),
-          communityId: 'municipal_updates'
+          communityId: 'municipal_updates',
+          imageUrl: report.imageUrl || null
         };
         await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
       }
@@ -370,7 +372,8 @@ export default function App() {
           text: `✅ Resolution Update: The "${report.category}" report submitted by @${report.senderName} in ${report.city} has been resolved. Containment/cleanup completed.`,
           timestamp: timestampStr,
           createdAt: Date.now(),
-          communityId: 'municipal_updates'
+          communityId: 'municipal_updates',
+          imageUrl: report.imageUrl || null
         };
         await setDoc(doc(collection(db, 'community_messages'), msgId), updateMsg);
       }
