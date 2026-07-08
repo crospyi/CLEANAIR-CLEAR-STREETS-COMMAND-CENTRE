@@ -123,23 +123,33 @@ export default function GisMapOverlay({
     reports.forEach((report) => {
       const [lat, lon] = getReportCoords(report);
       const theme = getCategoryTheme(report.category);
-
+      const hasImage = !!report.imageUrl;
       const pinHtml = `
-        <div class="relative flex items-center justify-center w-8 h-8 rounded-full ${selectedReportId === report.id ? 'scale-125 z-50' : ''}">
-          <div class="absolute inset-0 rounded-full radar-pulse-rose" style="animation-duration: 2s; background-color: ${theme.color}22;"></div>
-          <div class="absolute -inset-1 rounded-full animate-ping opacity-25" style="animation-duration: 2.5s; background-color: ${theme.color};"></div>
-          <div class="relative border-2 w-6 h-6 rounded-full flex items-center justify-center shadow-md font-sans text-xs transition-all duration-300"
-               style="background-color: #ffffff; border-color: ${theme.color}; color: #000000;">
-            ${theme.emoji}
-          </div>
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-full ${selectedReportId === report.id ? 'scale-125 z-50' : ''}">
+          <div class="absolute inset-0 rounded-full radar-pulse-rose" style="animation-duration: 2.5s; background-color: ${theme.color}22;"></div>
+          <div class="absolute -inset-1 rounded-full animate-ping opacity-25" style="animation-duration: 3s; background-color: ${theme.color};"></div>
+          ${hasImage ? `
+            <div class="relative border-2 w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all duration-300 overflow-hidden bg-slate-100"
+                 style="border-color: ${theme.color};">
+              <img src="${report.imageUrl}" class="w-full h-full object-cover rounded-full" style="width: 100%; height: 100%; object-fit: cover;" />
+              <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[9px] shadow-xs">
+                ${theme.emoji}
+              </div>
+            </div>
+          ` : `
+            <div class="relative border-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md font-sans text-xs transition-all duration-300"
+                 style="background-color: #ffffff; border-color: ${theme.color}; color: #000000;">
+              ${theme.emoji}
+            </div>
+          `}
         </div>
       `;
 
       const customIcon = L.divIcon({
         html: pinHtml,
         className: 'custom-leaflet-pin',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [40, 40],
+        iconAnchor: [20, 20]
       });
 
       const marker = L.marker([lat, lon], { icon: customIcon });
